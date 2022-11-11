@@ -18,8 +18,14 @@ let package = Package(
     ],
     dependencies: [
         // Dependencies declare other packages that this package depends on.
-        .package(path: "../SwiftRTP"),
-        .package(path: "../BinaryKit"),
+        .package(
+            url: "https://github.com/Lugitan/SwiftRTP.git",
+            .branch("master")
+        ),
+        .package(
+            url: "https://github.com/Lugitan/BinaryKit.git",
+            .branch("master")
+        ),
     ],
     targets: [
         // Targets are the basic building blocks of a package. A target can define a module or a test suite.

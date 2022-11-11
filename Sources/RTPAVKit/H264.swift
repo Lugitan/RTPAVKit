@@ -197,7 +197,6 @@ public final class RTPH264Sender {
             }
             if let error = error {
                 print(error)
-                
                 return
             }
             guard let data = data else {
@@ -268,6 +267,7 @@ public final class RTPH264Sender {
         guard self._state == .connected else { return }
         frameCount += 1
         do {
+            print("encodeAndSendFrame")
             let encoder = try setupEncoderIfNeeded(width: frame.width, height: frame.height)
             try encoder.encodeFrame(imageBuffer: frame, presentationTimeStamp: presentationTimeStamp, duration: frameDuration, frameProperties: [
                 kVTEncodeFrameOptionKey_ForceKeyFrame: frameCount.isMultiple(of: 30),
