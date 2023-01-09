@@ -144,7 +144,7 @@ public final class RTPH264Sender {
     }
     public var state: State { queue.sync { _state } }
     
-    private let timeoutInterval: DispatchTimeInterval = .milliseconds(1000)
+    private let timeoutInterval: DispatchTimeInterval = .milliseconds(3000)
     
     public init(connection: NWConnection, queue: DispatchQueue) {
         self.queue = queue
@@ -224,9 +224,11 @@ public final class RTPH264Sender {
         queue.asyncAfter(deadline: .now() + timeoutInterval, execute: workItem)
     }
     private func timeout() {
-        guard _state == .connected || _state == .prepairing else { return }
-        _state = .failed
-        connection.cancel()
+        guard _state == .connected || _state == .prepairing else {
+            _state = .failed
+            connection.cancel()
+            return
+        }
     }
     
     @discardableResult
@@ -267,7 +269,6 @@ public final class RTPH264Sender {
         guard self._state == .connected else { return }
         frameCount += 1
         do {
-            print("encodeAndSendFrame")
             let encoder = try setupEncoderIfNeeded(width: frame.width, height: frame.height)
             try encoder.encodeFrame(imageBuffer: frame, presentationTimeStamp: presentationTimeStamp, duration: frameDuration, frameProperties: [
                 kVTEncodeFrameOptionKey_ForceKeyFrame: frameCount.isMultiple(of: 30),
@@ -311,7 +312,6 @@ public final class RTPH264Sender {
         /// ```
         /// To reproduce this problem, connect to a Bonjour name that does not exists on the current network.
         if connection.currentPath?.localEndpoint?.interface != nil {
-            
             currentDataTransferReport?.collect(queue: collectionQueue, completion: { report in
                 onCollectConnectionMetric(report)
             })
