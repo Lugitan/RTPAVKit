@@ -532,11 +532,9 @@ public final class RTPH264RecieverListener {
             self.currentReciever = reciever
             self.newConnectionHandler?(reciever)
             reciever.start()
-            
-            
         }
     }
-    func start() {
+    public func start() {
         listen.start(queue: queue)
     }
     deinit {

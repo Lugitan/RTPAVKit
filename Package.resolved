@@ -1,0 +1,25 @@
+{
+  "object": {
+    "pins": [
+      {
+        "package": "BinaryKit",
+        "repositoryURL": "https://github.com/Lugitan/BinaryKit.git",
+        "state": {
+          "branch": "master",
+          "revision": "626cbbff21885d17191c02d99da4eaad23faaa7f",
+          "version": null
+        }
+      },
+      {
+        "package": "SwiftRTP",
+        "repositoryURL": "https://github.com/Lugitan/SwiftRTP.git",
+        "state": {
+          "branch": "master",
+          "revision": "d17c1b5d818b9d6d71fface25ade137a6585cf56",
+          "version": null
+        }
+      }
+    ]
+  },
+  "version": 1
+}
