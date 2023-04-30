@@ -512,12 +512,20 @@ public final class VideoDecoder {
     }
 }
 
-public final class RTPH264RecieverListener {
+public final class RTPH264ReceiverListener {
     private let queue = DispatchQueue(label: "de.nadoba.\(RTPH264Reciever.self).udp")
     private let listen: NWListener
     private let timebase: CMTimebase
     private var currentReciever: RTPH264Reciever?
     public var newConnectionHandler: ((RTPH264Reciever) -> ())?
+    private var _state: RTPH264Reciever.State = .setup
+    
+    public var state: RTPH264Reciever.State {
+        get {
+            return _state
+        }
+    }
+
     public init(port: NWEndpoint.Port, timebase: CMTimebase) {
         self.timebase = timebase
         let parameters = NWParameters.udp
@@ -527,16 +535,18 @@ public final class RTPH264RecieverListener {
         listen.newConnectionHandler = { [weak self] connection in
             guard let self = self else { return }
             
-            connection.start(queue: self.queue)
             let reciever = RTPH264Reciever(connection: connection, timebase: timebase)
             self.currentReciever = reciever
             self.newConnectionHandler?(reciever)
+            self._state = (currentReciever?.state)!
             reciever.start()
         }
     }
+    
     public func start() {
         listen.start(queue: queue)
     }
+    
     deinit {
         listen.cancel()
     }
